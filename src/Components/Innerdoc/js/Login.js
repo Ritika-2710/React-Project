@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Container} from "react-bootstrap";
-import './login.css';
+import '../css/login.css';
 class Login extends Component
 {
     constructor()
@@ -20,7 +20,11 @@ class Login extends Component
     {
         alert(`${this.state.Name} ${this.state.Password}`)
         event.preventDefault()
-        localStorage.setItem('document',JSON.stringify(this.state));
+        var a = [];
+        a = JSON.parse(localStorage.getItem('document')) || [];
+        a.push(this.state);
+        localStorage.setItem('document', JSON.stringify(a));
+        alert("successfully upload");
     }
     componentDidMount() {
         this.documentData = JSON.parse(localStorage.getItem('document'));
@@ -41,7 +45,7 @@ class Login extends Component
     render()
     {
         return(
-            <>
+            <section class="Login">
             <Container>
                 <Row>
                     <Col lg={6} className="Login-part">
@@ -69,13 +73,13 @@ class Login extends Component
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col><button className="button">Submit</button></Col>
+                                    <Col><button className="login-button">Submit</button></Col>
                                 </Row>
                             </form>
                     </Col>
                 </Row>
             </Container>
-            </>
+            </section>
         );
     }
 }

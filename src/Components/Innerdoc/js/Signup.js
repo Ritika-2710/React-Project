@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Row, Col, Container} from "react-bootstrap";
 import {Link} from 'react-router-dom';
-import  './signup.css';
+import  '../css/signup.css';
+import axios from 'axios';
 class Signup extends Component
 {
     constructor()
@@ -23,30 +24,38 @@ class Signup extends Component
     handlesubmit = (event) =>
     {
         event.preventDefault()
-        var a = [];
-        a = JSON.parse(localStorage.getItem('document')) || [];
-        a.push(this.state);
-        localStorage.setItem('document', JSON.stringify(a));
-        alert("successfully upload");
-    }
-    componentDidMount() {
-        this.documentData = JSON.parse(localStorage.getItem('document'));
-     
-        if (localStorage.getItem('document')) {
-                this.setState({
-                    firstname: this.documentData.firstname,
-                    lastname: this.documentData.lastname,
-                    email: this.documentData.email,
-                    phone: this.documentData.phone,
-                    password: this.documentData.password,
-            })
-        } 
-        else {
-            this.setState({
-                Name: '',
-                Password: '',
-            })
-        }
+        console.log(this.state.firstname)
+        console.log(this.state.email)
+        console.log(this.state.lastname)
+        console.log(this.state.phone)
+
+        // CORS Unblock tool to unblock cross origin error!
+        const url ='http://localhost/ReactJs/mobile_api/signup/getdata.php'
+        const postData = {                                
+            firstname:this.state.firstname,
+            lastname:this.state.lastname,
+            email:this.state.email,
+            phone:this.state.phone,
+            password:this.state.password
+        };  
+        let axiosConfig = {
+            headers: {
+                'Content-Type' : 'application/json; charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+            }
+        };
+        axios({
+            method: 'post',
+            url: url,
+            mode:'cors',
+            headers: axiosConfig,
+            data: postData
+        })
+        .then((res) => {
+            const message = res.data;
+            console.log(message);
+        })
+
     }
     render()
     {
@@ -105,8 +114,8 @@ class Signup extends Component
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col><button className="button">Submit</button></Col>
-                                    <Col><button className="button"><Link to="/login"  className="button-text">Login</Link></button></Col>
+                                    <Col><button className="signup-button">Submit</button></Col>
+                                    <Col><button className="signup-button"><Link to="/login"  className="button-text">Login</Link></button></Col>
                                 </Row>
                             </form>
                     </Col>
